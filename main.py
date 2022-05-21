@@ -8,6 +8,7 @@ MAX_NUM = 999
 
 
 def getN():
+    '''get N from user'''
     n = -1
     while n<1:
         print('please enter number of elements you want from array:')
@@ -18,6 +19,7 @@ def getN():
             print(f'n should be positive integer')
 
 def getK(n):
+    '''get K from user based on previous N'''
     k = n+1
     while k > n or k <1:
         print('please enter number of min elements you want to get:')
@@ -31,10 +33,10 @@ def getRandomIntArray(n: int):
     '''func to generate a random array in len {n}'''
     print(f'random array in of {n} elements is generated')
 
-    randomlist = []
+    random_list = []
     for i in range(n):
-        randomlist.append(random.randint(MIN_NUM, MAX_NUM))
-    return randomlist
+        random_list.append(random.randint(MIN_NUM, MAX_NUM))
+    return random_list
 
 
 def getIntArrayFromUser(n: int):
@@ -61,42 +63,50 @@ def getArray(n, opt = -1):
 
 def buildHeap(arr: list):
     ''' func to build min heap from array'''
-    minHeap = MinHeap(len(arr) + 1)
+    min_heap = MinHeap(len(arr) + 1)
     for i in arr:
-        minHeap.Insert(i)
-    minHeap.buildHeap()
-    return minHeap
+        min_heap.Insert(i)
+    min_heap.buildHeap()
+    return min_heap
 
 
 def kMinFromHeap(heap: MinHeap, k: int):
     ''' func to extract k min elements from heap
     func also prints number of comparissons it took
     '''
-    minK = []
+    min_k = []
     for i in range(k):
-        minK.append(heap.heapPop())
-    print(minK)
-    print(heap.compareCounter())
+        min_k.append(heap.heapPop())
+    print(f"min k: {min_k}")
+    print(f'comp counter: {heap.compareCounter()}')
+
+def kMinFromQuickSort(arr: list, k: int):
+    qso = QuickSort(arr)
+    qso.quickSelect(0, len(arr) - 1, k)
+    qso.setArr(arr[:k])
+    qso.quickSort(0, k - 1)
+    print(f"min k: {qso.arr}")
+    print(f'comp counter: {qso.compareCounter()}')
 
 
 def main():
 
     #for both
-    n=10#n = getN()
-    k=5#k = getK(n)
+    n=11#n = getN()
+    k=6#k = getK(n)
     arr = getArray(n, opt = 1)
     print(arr)
+    print(sorted(arr))
 
     #heap
-    arr = [6,7,8,9,10]
-    n = 10
-    k = 3
-    h = buildHeap(arr)
-    kMinFromHeap(h, k)
+    print('heap\n')
+    kMinFromHeap(buildHeap(arr), k)
 
     #select
-    # print(sorted(arr))
-    # print(RSelect(arr, k))
+    print('select\n')
+    kMinFromQuickSort(arr,k)
+
+
 
 
 main()
