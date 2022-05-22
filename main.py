@@ -1,8 +1,9 @@
-import random
+
+import pandas as pd
 from heap_sort import *
 from rand_select import *
-# input array with  N numbers
-# output - k smallest numbers - ordered
+
+
 MIN_NUM = 0
 MAX_NUM = 999
 
@@ -77,43 +78,74 @@ def kMinFromHeap(heap: MinHeap, k: int):
     min_k = []
     for i in range(k):
         min_k.append(heap.heapPop())
-    print(f"min k: {min_k}")
-    print(f'comp counter: {heap.compareCounter()}')
+    print(f"min k elements: {min_k}")
+    print(f'comparisons counter: {heap.compareCounter()}')
+    return heap.compareCounter()
 
 def kMinFromQuickSort(arr: list, k: int):
     qso = QuickSort(arr)
     qso.quickSelect(0, len(arr) - 1, k)
     qso.setArr(arr[:k])
     qso.quickSort(0, k - 1)
-    print(f"min k: {qso.arr}")
-    print(f'comp counter: {qso.compareCounter()}')
+    print(f"min k elements: {qso.arr}")
+    print(f'comparisons counter: {qso.compareCounter()}')
+    return qso.compareCounter()
+
+def small_check():
+    si = {100: {}, 200: {}, 500: {}, 1000: {}}
+    hi = {100: {}, 200: {}, 500: {}, 1000: {}}
+
+    for n in [100, 200, 500, 1000]:
+        for k in [8, 50, 99]:
+            hi[n][k] = 0
+            si[n][k] = 0
+
+    rng = 1000
+    for i in range(rng):
+        for n in [100, 200, 500, 1000]:
+            for k in [8, 50, 99]:
+                arr = getArray(n, opt=1)
+                h = kMinFromHeap(buildHeap(arr), k)
+                s = kMinFromQuickSort(arr, k)
+                hi[n][k] += h
+                si[n][k] += s
+
+    for n in [100, 200, 500, 1000]:
+        for k in [8, 50, 99]:
+            hi[n][k] /= rng
+            si[n][k] /= rng
+
+    print('heap')
+    print(pd.DataFrame(hi))
+    print("*" * 10)
+    print('quick')
+    print(pd.DataFrame(si))
 
 
-def main():
+def main(checks = 0):
 
-    #for both
-    n=11#n = getN()
-    k=6#k = getK(n)
-    arr = getArray(n, opt = 1)
-    print(arr)
-    print(sorted(arr))
+    if checks == 0:
+        #for both
+        n = getN()
+        k = getK(n)
 
-    #heap
-    print('heap\n')
-    kMinFromHeap(buildHeap(arr), k)
+        arr = getArray(n, opt=1)
+        print(f"N is {n}")
+        print(f"K is {k}")
+        print(f"arr is {arr}\n")
 
-    #select
-    print('select\n')
-    kMinFromQuickSort(arr,k)
+        # heap
+        print('\nusing heap')
+        kMinFromHeap(buildHeap(arr), k)
+
+        # select
+        print('\nusing select')
+        kMinFromQuickSort(arr, k)
+
+    if checks == 1:
+        small_check()
 
 
+main(1)
 
 
-main()
-
-
-#a = getRandomIntArray(n)
-# a = [999, 77, 152, 417, 553, 980]
-#a = buildHeap(a)
-#k = int(n / 2)
-#

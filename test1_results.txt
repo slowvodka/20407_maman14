@@ -1,0 +1,19 @@
+please enter number of elements you want from array:11
+please enter number of min elements you want to get:6
+please specify how to enter the array: enter a number of the option
+1. random array
+2. manual input array
+1
+random array in of 11 elements is generated
+N is 11
+K is 6
+arr is [167, 698, 752, 733, 613, 203, 941, 324, 512, 822, 560]
+
+
+using heap
+min k elements: [167, 203, 324, 512, 560, 613]
+comparisons counter: 25
+
+using select
+min k elements: [167, 203, 324, 512, 560, 613]
+comparisons counter: 12
