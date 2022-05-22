@@ -1,8 +1,6 @@
-
 import pandas as pd
 from heap_sort import *
 from rand_select import *
-
 
 MIN_NUM = 0
 MAX_NUM = 999
@@ -11,7 +9,7 @@ MAX_NUM = 999
 def getN():
     '''get N from user'''
     n = -1
-    while n<1:
+    while n < 1:
         print('please enter number of elements you want from array:')
         n = int(input())
         if n > 0:
@@ -19,16 +17,18 @@ def getN():
         else:
             print(f'n should be positive integer')
 
+
 def getK(n):
     '''get K from user based on previous N'''
-    k = n+1
-    while k > n or k <1:
+    k = n + 1
+    while k > n or k < 1:
         print('please enter number of min elements you want to get:')
         k = int(input())
-        if k > 0 and k<=n:
+        if k > 0 and k <= n:
             return k
         else:
             print(f'{k} should be between 1 to {n}')
+
 
 def getRandomIntArray(n: int):
     '''func to generate a random array in len {n}'''
@@ -47,7 +47,7 @@ def getIntArrayFromUser(n: int):
     return [int(input()) for i in range(n)]
 
 
-def getArray(n, opt = -1):
+def getArray(n, opt=-1):
     ''' func to get array'''
     print('please specify how to enter the array: enter a number of the option')
     print('1. random array')
@@ -64,7 +64,7 @@ def getArray(n, opt = -1):
 
 def buildHeap(arr: list):
     ''' func to build min heap from array'''
-    min_heap = MinHeap(len(arr) + 1)
+    min_heap = MinHeap(len(arr))
     for i in arr:
         min_heap.Insert(i)
     min_heap.buildHeap()
@@ -82,36 +82,40 @@ def kMinFromHeap(heap: MinHeap, k: int):
     print(f'comparisons counter: {heap.compareCounter()}')
     return heap.compareCounter()
 
+
 def kMinFromQuickSort(arr: list, k: int):
     qso = QuickSort(arr)
-    qso.quickSelect(0, len(arr) - 1, k)
+    qso.quickSelect(0, len(arr) - 1, k - 1)
     qso.setArr(arr[:k])
     qso.quickSort(0, k - 1)
     print(f"min k elements: {qso.arr}")
     print(f'comparisons counter: {qso.compareCounter()}')
     return qso.compareCounter()
 
-def small_check():
-    si = {100: {}, 200: {}, 500: {}, 1000: {}}
-    hi = {100: {}, 200: {}, 500: {}, 1000: {}}
 
-    for n in [100, 200, 500, 1000]:
-        for k in [8, 50, 99]:
+def small_check(rng=1):
+    n_list = [100, 200, 500, 1000]
+    k_list = [8, 50, 99]
+
+    si = {i: {} for i in n_list}
+    hi = {i: {} for i in n_list}
+
+    for n in n_list:
+        for k in k_list:
             hi[n][k] = 0
             si[n][k] = 0
 
-    rng = 1000
     for i in range(rng):
-        for n in [100, 200, 500, 1000]:
-            for k in [8, 50, 99]:
+        for n in n_list:
+            for k in k_list:
                 arr = getArray(n, opt=1)
                 h = kMinFromHeap(buildHeap(arr), k)
                 s = kMinFromQuickSort(arr, k)
                 hi[n][k] += h
                 si[n][k] += s
 
-    for n in [100, 200, 500, 1000]:
-        for k in [8, 50, 99]:
+    for n in n_list:
+        for k in k_list:
             hi[n][k] /= rng
             si[n][k] /= rng
 
@@ -122,10 +126,9 @@ def small_check():
     print(pd.DataFrame(si))
 
 
-def main(checks = 0):
-
-    if checks == 0:
-        #for both
+def main(checks=False, rng=1):
+    if checks == False:
+        # for both
         n = getN()
         k = getK(n)
 
@@ -142,10 +145,8 @@ def main(checks = 0):
         print('\nusing select')
         kMinFromQuickSort(arr, k)
 
-    if checks == 1:
-        small_check()
+    if checks == True:
+        small_check(rng)
 
 
-main(1)
-
-
+main(True, rng=0)

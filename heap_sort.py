@@ -24,7 +24,7 @@ class MinHeap:
         # If the node is a not a leaf node and is greater than any of its child
         if not ((self.cur_size // 2) <= i <= self.cur_size):
             if self.heap[i] > self.heap[2 * i] or self.heap[i] > self.heap[(2 * i) + 1]:
-                self.count+=2
+                self.count += 2
                 if self.heap[2 * i] < self.heap[(2 * i) + 1]:
                     self.count += 1
                     # Swap the node with the left child and then call the minHeapify function on it
@@ -35,6 +35,7 @@ class MinHeap:
                     # Swap the node with right child and then call the minHeapify function on it
                     self.Swap(i, (2 * i) + 1)
                     self.minHeapify((2 * i) + 1)
+
 
     def Insert(self, element):
         '''THE INSERT FUNCTION'''
@@ -68,5 +69,3 @@ class MinHeap:
 
     def compareCounter(self):
         return self.count
-
-
